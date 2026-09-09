@@ -284,16 +284,16 @@ export default function Home() {
 
   return (
     <main
-      className={`${display.variable} ${body.variable} min-h-screen bg-[#f7f7f4] text-[#111111]`}
+      className={`${display.variable} ${body.variable} min-h-screen bg-bg-primary text-text-primary`}
     >
       {/* HEADER */}
-      <header className="sticky top-0 z-50 border-b border-black/10 bg-[#f7f7f4]/95 backdrop-blur">
+      <header className="sticky top-0 z-50 border-b border-border-color bg-bg-primary/95 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-5 py-4 lg:px-8">
           <a
             href="#top"
             className="font-[family-name:var(--font-display)] text-xl font-bold tracking-tight"
           >
-            AA<span className="text-blue-600">.</span>
+            AA<span className="text-accent">.</span>
           </a>
 
           <nav className="hidden items-center gap-7 md:flex">
@@ -301,7 +301,7 @@ export default function Home() {
               <a
                 key={link.label}
                 href={link.href}
-                className="text-sm font-medium text-black/65 transition hover:text-black"
+                className="text-sm font-medium opacity-65 transition hover:opacity-100"
               >
                 {link.label}
               </a>
@@ -311,14 +311,14 @@ export default function Home() {
           <div className="hidden items-center gap-3 md:flex">
             <a
               href="#contact"
-              className="rounded-full border border-black/15 px-4 py-2 text-sm font-medium transition hover:border-black hover:bg-black hover:text-white"
+              className="rounded-full border border-border-color px-4 py-2 text-sm font-medium transition hover:border-text-primary hover:bg-text-primary hover:text-bg-primary"
             >
               Check My CV
             </a>
 
             <a
               href="#contact"
-              className="flex items-center gap-2 rounded-full bg-black px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-600"
+              className="flex items-center gap-2 rounded-full bg-text-primary px-4 py-2 text-sm font-medium text-bg-primary transition hover:bg-accent hover:text-white"
             >
               Book a Free Call
               <ArrowUpRight />
@@ -327,7 +327,7 @@ export default function Home() {
 
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="rounded-lg border border-black/10 p-2 md:hidden"
+            className="rounded-lg border border-border-color p-2 md:hidden"
             aria-label="Toggle menu"
           >
             {menuOpen ? "×" : "☰"}
@@ -335,7 +335,7 @@ export default function Home() {
         </div>
 
         {menuOpen && (
-          <div className="border-t border-black/10 px-5 py-5 md:hidden">
+          <div className="border-t border-border-color px-5 py-5 md:hidden">
             <nav className="flex flex-col gap-5">
               {NAV_LINKS.map((link) => (
                 <a
@@ -351,7 +351,7 @@ export default function Home() {
               <a
                 href="#contact"
                 onClick={() => setMenuOpen(false)}
-                className="rounded-full bg-black px-5 py-3 text-center text-sm font-medium text-white"
+                className="rounded-full bg-text-primary px-5 py-3 text-center text-sm font-medium text-bg-primary"
               >
                 Book a Free Call
               </a>
@@ -361,12 +361,12 @@ export default function Home() {
       </header>
 
       {/* HERO */}
-      <section id="top" className="border-b border-black/10">
+      <section id="top" className="border-b border-border-color">
         <div className="mx-auto grid max-w-7xl gap-12 px-5 py-20 lg:grid-cols-[1.35fr_.65fr] lg:px-8 lg:py-32">
           <div>
             <div className="mb-7 flex items-center gap-3">
-              <span className="h-2 w-2 rounded-full bg-blue-600" />
-              <span className="text-sm font-medium uppercase tracking-[0.18em] text-black/50">
+              <span className="h-2 w-2 rounded-full bg-accent" />
+              <span className="text-sm font-medium uppercase tracking-[0.18em] opacity-50">
                 AI Automation & n8n Specialist
               </span>
             </div>
@@ -374,10 +374,10 @@ export default function Home() {
             <h1 className="max-w-5xl font-[family-name:var(--font-display)] text-5xl font-bold leading-[0.95] tracking-[-0.05em] sm:text-6xl lg:text-8xl">
               I build systems
               <br />
-              that <span className="text-blue-600">work for you.</span>
+              that <span className="text-accent">work for you.</span>
             </h1>
 
-            <p className="mt-8 max-w-2xl text-lg leading-8 text-black/60 sm:text-xl">
+            <p className="mt-8 max-w-2xl text-lg leading-8 opacity-60 sm:text-xl">
               I build AI-powered workflows, n8n automations, chatbots, and
               business systems that eliminate repetitive work and connect the
               tools your business already uses.
@@ -386,7 +386,7 @@ export default function Home() {
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a
                 href="#contact"
-                className="flex items-center justify-center gap-2 rounded-full bg-black px-6 py-3.5 text-sm font-semibold text-white transition hover:bg-blue-600"
+                className="flex items-center justify-center gap-2 rounded-full bg-text-primary px-6 py-3.5 text-sm font-semibold text-bg-primary transition hover:bg-accent hover:text-white"
               >
                 Book a Free Discovery Call
                 <ArrowUpRight />
@@ -394,30 +394,30 @@ export default function Home() {
 
               <a
                 href="#projects"
-                className="flex items-center justify-center gap-2 rounded-full border border-black/15 px-6 py-3.5 text-sm font-semibold transition hover:border-black"
+                className="flex items-center justify-center gap-2 rounded-full border border-border-color px-6 py-3.5 text-sm font-semibold transition hover:border-text-primary"
               >
                 View My Projects
               </a>
             </div>
 
-            <div className="mt-8 flex flex-wrap gap-5 text-sm text-black/50">
-              <a href="#" className="transition hover:text-black">
+            <div className="mt-8 flex flex-wrap gap-5 text-sm opacity-50">
+              <a href="#" className="transition hover:opacity-100">
                 GitHub ↗
               </a>
-              <a href="#" className="transition hover:text-black">
+              <a href="#" className="transition hover:opacity-100">
                 LinkedIn ↗
               </a>
-              <a href="#" className="transition hover:text-black">
+              <a href="#" className="transition hover:opacity-100">
                 Upwork ↗
               </a>
             </div>
           </div>
 
           <div className="flex items-end lg:justify-end">
-            <div className="w-full max-w-md rounded-3xl border border-black/10 bg-white p-6 shadow-[0_20px_60px_rgba(0,0,0,0.05)]">
+            <div className="w-full max-w-md rounded-3xl border border-border-color bg-card-bg p-6 shadow-lg">
               <div className="mb-8 flex items-center justify-between">
                 <span className="text-sm font-medium">Automation System</span>
-                <span className="flex items-center gap-2 text-xs text-green-600">
+                <span className="flex items-center gap-2 text-xs text-green-500">
                   <span className="h-2 w-2 rounded-full bg-green-500" />
                   Active
                 </span>
@@ -433,9 +433,9 @@ export default function Home() {
                 ].map((item, index) => (
                   <div
                     key={item}
-                    className="flex items-center gap-3 rounded-xl border border-black/10 bg-[#f7f7f4] p-3"
+                    className="flex items-center gap-3 rounded-xl border border-border-color bg-bg-primary p-3"
                   >
-                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-black text-xs text-white">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-text-primary text-xs text-bg-primary">
                       {index + 1}
                     </span>
                     <span className="text-sm font-medium">{item}</span>
@@ -443,8 +443,8 @@ export default function Home() {
                 ))}
               </div>
 
-              <div className="mt-5 rounded-xl bg-blue-600 p-4 text-white">
-                <div className="text-xs uppercase tracking-wider text-white/60">
+              <div className="mt-5 rounded-xl bg-accent p-4 text-white">
+                <div className="text-xs uppercase tracking-wider opacity-60">
                   Result
                 </div>
                 <div className="mt-1 font-[family-name:var(--font-display)] text-lg font-semibold">
@@ -457,7 +457,7 @@ export default function Home() {
       </section>
 
       {/* STATS */}
-      <section className="border-b border-black/10">
+      <section className="border-b border-border-color">
         <div className="mx-auto grid max-w-7xl grid-cols-2 px-5 lg:grid-cols-4 lg:px-8">
           {[
             ["n8n", "Workflow automation"],
@@ -467,22 +467,22 @@ export default function Home() {
           ].map(([value, label]) => (
             <div
               key={label}
-              className="border-r border-black/10 px-5 py-8 first:pl-0 last:border-r-0 lg:px-8"
+              className="border-r border-border-color px-5 py-8 first:pl-0 last:border-r-0 lg:px-8"
             >
               <div className="font-[family-name:var(--font-display)] text-3xl font-bold">
                 {value}
               </div>
-              <div className="mt-1 text-sm text-black/50">{label}</div>
+              <div className="mt-1 text-sm opacity-50">{label}</div>
             </div>
           ))}
         </div>
       </section>
 
       {/* SERVICES */}
-      <section id="services" className="border-b border-black/10">
+      <section id="services" className="border-b border-border-color">
         <div className="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
               Services
             </p>
 
@@ -492,7 +492,7 @@ export default function Home() {
               for you.
             </h2>
 
-            <p className="mt-6 text-lg leading-8 text-black/55">
+            <p className="mt-6 text-lg leading-8 opacity-55">
               Practical automation systems designed around the way your
               business actually works.
             </p>
@@ -502,16 +502,16 @@ export default function Home() {
             {SERVICES.map((service) => (
               <div
                 key={service.number}
-                className="group rounded-3xl border border-black/10 bg-white p-7 transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group rounded-3xl border border-border-color bg-card-bg p-7 transition duration-300 hover:-translate-y-1 hover:shadow-xl"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-sm font-semibold text-blue-600">
+                  <span className="text-sm font-semibold text-accent">
                     {service.number}
                   </span>
                   <ArrowUpRight />
                 </div>
 
-                <p className="mt-12 text-sm text-black/45">
+                <p className="mt-12 text-sm opacity-45">
                   {service.eyebrow}
                 </p>
 
@@ -519,17 +519,17 @@ export default function Home() {
                   {service.title}
                 </h3>
 
-                <p className="mt-4 leading-7 text-black/55">
+                <p className="mt-4 leading-7 opacity-55">
                   {service.description}
                 </p>
 
-                <div className="mt-7 space-y-3 border-t border-black/10 pt-6">
+                <div className="mt-7 space-y-3 border-t border-border-color pt-6">
                   {service.features.map((feature) => (
                     <div
                       key={feature}
                       className="flex items-center gap-3 text-sm"
                     >
-                      <span className="text-blue-600">
+                      <span className="text-accent">
                         <Check />
                       </span>
                       {feature}
@@ -543,10 +543,10 @@ export default function Home() {
       </section>
 
       {/* PROCESS */}
-      <section className="border-b border-black/10">
+      <section className="border-b border-border-color">
         <div className="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
               How I work
             </p>
 
@@ -557,13 +557,13 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="mt-16 grid gap-0 border-t border-black/10 lg:grid-cols-4">
+          <div className="mt-16 grid gap-0 border-t border-border-color lg:grid-cols-4">
             {PROCESS.map((step) => (
               <div
                 key={step.number}
-                className="border-b border-black/10 py-8 lg:border-b-0 lg:border-r lg:px-7 lg:first:pl-0 lg:last:border-r-0"
+                className="border-b border-border-color py-8 lg:border-b-0 lg:border-r lg:px-7 lg:first:pl-0 lg:last:border-r-0"
               >
-                <div className="text-sm font-semibold text-blue-600">
+                <div className="text-sm font-semibold text-accent">
                   {step.number}
                 </div>
 
@@ -571,7 +571,7 @@ export default function Home() {
                   {step.title}
                 </h3>
 
-                <p className="mt-4 leading-7 text-black/55">
+                <p className="mt-4 leading-7 opacity-55">
                   {step.description}
                 </p>
               </div>
@@ -581,11 +581,11 @@ export default function Home() {
       </section>
 
       {/* PROJECTS */}
-      <section id="projects" className="border-b border-black/10">
+      <section id="projects" className="border-b border-border-color">
         <div className="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32">
           <div className="flex flex-col justify-between gap-6 md:flex-row md:items-end">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
                 Selected Work
               </p>
 
@@ -594,7 +594,7 @@ export default function Home() {
               </h2>
             </div>
 
-            <p className="max-w-md text-black/55">
+            <p className="max-w-md opacity-55">
               A selection of automation and AI workflow concepts. Replace
               these descriptions with your final project case studies.
             </p>
@@ -603,36 +603,36 @@ export default function Home() {
           <div className="mt-16 grid gap-8 md:grid-cols-2">
             {PROJECTS.map((project) => (
               <article key={project.number} className="group">
-                <div className="aspect-[16/10] overflow-hidden rounded-3xl border border-black/10 bg-[#111] p-5">
-                  <div className="flex h-full flex-col rounded-2xl bg-[#202020] p-5">
+                <div className="aspect-[16/10] overflow-hidden rounded-3xl border border-border-color bg-card-bg p-5">
+                  <div className="flex h-full flex-col rounded-2xl bg-bg-primary/50 p-5">
                     <div className="flex items-center justify-between">
-                      <span className="text-xs text-white/40">
+                      <span className="text-xs opacity-40">
                         {project.category}
                       </span>
-                      <span className="text-xs text-blue-400">
+                      <span className="text-xs text-accent">
                         {project.number}
                       </span>
                     </div>
 
                     <div className="my-auto space-y-3">
-                      <div className="h-3 w-3/4 rounded bg-white/15" />
-                      <div className="h-3 w-1/2 rounded bg-white/10" />
+                      <div className="h-3 w-3/4 rounded bg-text-primary/15" />
+                      <div className="h-3 w-1/2 rounded bg-text-primary/10" />
 
                       <div className="grid grid-cols-3 gap-2 pt-4">
-                        <div className="h-14 rounded-lg bg-blue-600/80" />
-                        <div className="h-14 rounded-lg bg-white/10" />
-                        <div className="h-14 rounded-lg bg-white/10" />
+                        <div className="h-14 rounded-lg bg-accent/80" />
+                        <div className="h-14 rounded-lg bg-text-primary/10" />
+                        <div className="h-14 rounded-lg bg-text-primary/10" />
                       </div>
                     </div>
 
-                    <div className="text-xs text-white/30">
+                    <div className="text-xs opacity-30">
                       n8n · AI · APIs
                     </div>
                   </div>
                 </div>
 
                 <div className="mt-6">
-                  <div className="text-sm text-blue-600">
+                  <div className="text-sm text-accent">
                     {project.category}
                   </div>
 
@@ -640,7 +640,7 @@ export default function Home() {
                     {project.title}
                   </h3>
 
-                  <p className="mt-3 leading-7 text-black/55">
+                  <p className="mt-3 leading-7 opacity-55">
                     {project.description}
                   </p>
 
@@ -648,7 +648,7 @@ export default function Home() {
                     {project.stack.map((tech) => (
                       <span
                         key={tech}
-                        className="rounded-full border border-black/10 px-3 py-1 text-xs text-black/55"
+                        className="rounded-full border border-border-color px-3 py-1 text-xs opacity-65"
                       >
                         {tech}
                       </span>
@@ -661,7 +661,7 @@ export default function Home() {
                         key={feature}
                         className="flex items-center gap-2 text-sm"
                       >
-                        <span className="text-blue-600">
+                        <span className="text-accent">
                           <Check />
                         </span>
                         {feature}
@@ -676,10 +676,10 @@ export default function Home() {
       </section>
 
       {/* AUTOMATIONS */}
-      <section id="automations" className="border-b border-black/10">
+      <section id="automations" className="border-b border-border-color">
         <div className="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
               Automation
             </p>
 
@@ -689,7 +689,7 @@ export default function Home() {
               keep moving.
             </h2>
 
-            <p className="mt-6 text-lg leading-8 text-black/55">
+            <p className="mt-6 text-lg leading-8 opacity-55">
               Instead of manually moving information from one application to
               another, let the workflow handle the repetitive steps.
             </p>
@@ -699,9 +699,9 @@ export default function Home() {
             {AUTOMATIONS.map((automation) => (
               <div
                 key={automation.number}
-                className="group grid gap-6 rounded-3xl border border-black/10 bg-white p-6 transition hover:border-blue-600/40 lg:grid-cols-[80px_1fr_1fr_auto] lg:items-center"
+                className="group grid gap-6 rounded-3xl border border-border-color bg-card-bg p-6 transition hover:border-accent/40 lg:grid-cols-[80px_1fr_1fr_auto] lg:items-center"
               >
-                <div className="text-sm font-semibold text-blue-600">
+                <div className="text-sm font-semibold text-accent">
                   {automation.number}
                 </div>
 
@@ -712,7 +712,7 @@ export default function Home() {
                 </div>
 
                 <div>
-                  <p className="font-mono text-sm text-black/55">
+                  <p className="font-mono text-sm opacity-55">
                     {automation.description}
                   </p>
                 </div>
@@ -721,7 +721,7 @@ export default function Home() {
                   {automation.tools.map((tool) => (
                     <span
                       key={tool}
-                      className="rounded-full bg-[#f1f1ed] px-3 py-1 text-xs"
+                      className="rounded-full bg-bg-primary px-3 py-1 text-xs border border-border-color"
                     >
                       {tool}
                     </span>
@@ -734,10 +734,10 @@ export default function Home() {
       </section>
 
       {/* EXPERIENCE */}
-      <section id="experience" className="border-b border-black/10">
+      <section id="experience" className="border-b border-border-color">
         <div className="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
               Experience
             </p>
 
@@ -748,13 +748,13 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="mt-16 border-t border-black/10">
+          <div className="mt-16 border-t border-border-color">
             {EXPERIENCE.map((item) => (
               <div
                 key={item.title}
-                className="grid gap-5 border-b border-black/10 py-8 lg:grid-cols-[180px_1fr_1.3fr] lg:gap-10"
+                className="grid gap-5 border-b border-border-color py-8 lg:grid-cols-[180px_1fr_1.3fr] lg:gap-10"
               >
-                <div className="text-sm font-semibold text-blue-600">
+                <div className="text-sm font-semibold text-accent">
                   {item.period}
                 </div>
 
@@ -762,12 +762,12 @@ export default function Home() {
                   <h3 className="font-[family-name:var(--font-display)] text-xl font-bold">
                     {item.title}
                   </h3>
-                  <p className="mt-1 text-sm text-black/45">
+                  <p className="mt-1 text-sm opacity-45">
                     {item.company}
                   </p>
                 </div>
 
-                <p className="leading-7 text-black/55">
+                <p className="leading-7 opacity-55">
                   {item.description}
                 </p>
               </div>
@@ -777,10 +777,10 @@ export default function Home() {
       </section>
 
       {/* TESTIMONIALS */}
-      <section className="border-b border-black/10">
+      <section className="border-b border-border-color">
         <div className="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32">
           <div className="max-w-3xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
               Testimonials
             </p>
 
@@ -790,19 +790,19 @@ export default function Home() {
               goes here.
             </h2>
 
-            <p className="mt-6 text-lg leading-8 text-black/55">
+            <p className="mt-6 text-lg leading-8 opacity-55">
               Once you have real client testimonials, we can place them here
               exactly like the reference portfolio. No fake testimonials.
             </p>
           </div>
 
-          <div className="mt-12 rounded-3xl border border-dashed border-black/20 bg-white p-8 text-center lg:p-16">
+          <div className="mt-12 rounded-3xl border border-dashed border-border-color bg-card-bg p-8 text-center lg:p-16">
             <div className="mx-auto max-w-xl">
               <div className="text-4xl">“</div>
               <p className="mt-3 font-[family-name:var(--font-display)] text-xl font-semibold">
                 Your first client testimonial will appear here.
               </p>
-              <p className="mt-3 text-sm text-black/45">
+              <p className="mt-3 text-sm opacity-45">
                 Replace this section when you have verified client feedback.
               </p>
             </div>
@@ -811,10 +811,10 @@ export default function Home() {
       </section>
 
       {/* FAQ */}
-      <section className="border-b border-black/10">
+      <section className="border-b border-border-color">
         <div className="mx-auto max-w-4xl px-5 py-24 lg:py-32">
           <div className="text-center">
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
               FAQ
             </p>
 
@@ -825,12 +825,12 @@ export default function Home() {
             </h2>
           </div>
 
-          <div className="mt-14 border-t border-black/10">
+          <div className="mt-14 border-t border-border-color">
             {FAQS.map((faq, index) => {
               const isOpen = openFaq === index;
 
               return (
-                <div key={faq.question} className="border-b border-black/10">
+                <div key={faq.question} className="border-b border-border-color">
                   <button
                     onClick={() => setOpenFaq(isOpen ? null : index)}
                     className="flex w-full items-center justify-between gap-6 py-6 text-left"
@@ -841,7 +841,7 @@ export default function Home() {
                   </button>
 
                   {isOpen && (
-                    <div className="pb-6 pr-10 text-sm leading-7 text-black/55">
+                    <div className="pb-6 pr-10 text-sm leading-7 opacity-55">
                       {faq.answer}
                     </div>
                   )}
@@ -857,7 +857,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32">
           <div className="grid gap-16 lg:grid-cols-[.8fr_1.2fr]">
             <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-blue-600">
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
                 Contact
               </p>
 
@@ -867,7 +867,7 @@ export default function Home() {
                 something.
               </h2>
 
-              <p className="mt-7 max-w-md text-lg leading-8 text-black/55">
+              <p className="mt-7 max-w-md text-lg leading-8 opacity-55">
                 Tell me about the workflow, business problem, or automation
                 you have in mind. We can figure out the best approach
                 together.
@@ -876,12 +876,12 @@ export default function Home() {
               <div className="mt-10 space-y-4 text-sm">
                 <a
                   href="mailto:YOUR_EMAIL@example.com"
-                  className="block transition hover:text-blue-600"
+                  className="block transition hover:text-accent"
                 >
                   YOUR_EMAIL@example.com
                 </a>
 
-                <p className="text-black/50">Remote · Worldwide</p>
+                <p className="opacity-50">Remote · Worldwide</p>
 
                 <a
                   href="#"
@@ -895,7 +895,7 @@ export default function Home() {
 
             <form
               onSubmit={(event) => event.preventDefault()}
-              className="rounded-3xl border border-black/10 bg-white p-6 sm:p-8"
+              className="rounded-3xl border border-border-color bg-card-bg p-6 sm:p-8"
             >
               <div className="grid gap-6">
                 <div>
@@ -905,7 +905,7 @@ export default function Home() {
                   <input
                     type="text"
                     placeholder="Your name"
-                    className="w-full rounded-xl border border-black/10 bg-[#f7f7f4] px-4 py-3.5 outline-none transition placeholder:text-black/30 focus:border-blue-600"
+                    className="w-full rounded-xl border border-border-color bg-bg-primary px-4 py-3.5 outline-none transition placeholder:opacity-30 focus:border-accent"
                   />
                 </div>
 
@@ -915,40 +915,25 @@ export default function Home() {
                   </label>
                   <input
                     type="email"
-                    placeholder="you@company.com"
-                    className="w-full rounded-xl border border-black/10 bg-[#f7f7f4] px-4 py-3.5 outline-none transition placeholder:text-black/30 focus:border-blue-600"
+                    placeholder="your.email@example.com"
+                    className="w-full rounded-xl border border-border-color bg-bg-primary px-4 py-3.5 outline-none transition placeholder:opacity-30 focus:border-accent"
                   />
                 </div>
 
                 <div>
                   <label className="mb-2 block text-sm font-medium">
-                    Project Type
+                    Project Details
                   </label>
-
-                  <select className="w-full rounded-xl border border-black/10 bg-[#f7f7f4] px-4 py-3.5 outline-none focus:border-blue-600">
-                    <option>AI Automation</option>
-                    <option>n8n Workflow</option>
-                    <option>AI Chatbot</option>
-                    <option>API Integration</option>
-                    <option>Other</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="mb-2 block text-sm font-medium">
-                    Message
-                  </label>
-
                   <textarea
-                    rows={6}
-                    placeholder="Tell me what you're trying to automate..."
-                    className="w-full resize-none rounded-xl border border-black/10 bg-[#f7f7f4] px-4 py-3.5 outline-none transition placeholder:text-black/30 focus:border-blue-600"
+                    rows={4}
+                    placeholder="Describe the workflow, business process, or tools you want to automate..."
+                    className="w-full rounded-xl border border-border-color bg-bg-primary px-4 py-3.5 outline-none transition placeholder:opacity-30 focus:border-accent"
                   />
                 </div>
 
                 <button
                   type="submit"
-                  className="flex items-center justify-center gap-2 rounded-full bg-black px-6 py-4 text-sm font-semibold text-white transition hover:bg-blue-600"
+                  className="flex w-full items-center justify-center gap-2 rounded-full bg-text-primary py-4 text-sm font-semibold text-bg-primary transition hover:bg-accent hover:text-white"
                 >
                   Send Message
                   <ArrowUpRight />
@@ -956,44 +941,13 @@ export default function Home() {
               </div>
             </form>
           </div>
+
+          <div className="mt-24 flex flex-col items-center justify-between gap-4 border-t border-border-color pt-8 text-xs opacity-50 sm:flex-row">
+            <p>© {new Date().getFullYear()} All rights reserved.</p>
+            <p>Designed for AI Automation & n8n Systems</p>
+          </div>
         </div>
       </section>
-
-      {/* FOOTER */}
-      <footer className="border-t border-black/10">
-        <div className="mx-auto max-w-7xl px-5 py-10 lg:px-8">
-          <div className="flex flex-col justify-between gap-8 md:flex-row md:items-end">
-            <div>
-              <div className="font-[family-name:var(--font-display)] text-3xl font-bold">
-                AA<span className="text-blue-600">.</span>
-              </div>
-
-              <p className="mt-2 text-sm text-black/50">
-                AI Automation & n8n Specialist
-              </p>
-            </div>
-
-            <div className="flex flex-wrap gap-5 text-sm text-black/50">
-              <a href="#" className="hover:text-black">
-                GitHub
-              </a>
-              <a href="#" className="hover:text-black">
-                LinkedIn
-              </a>
-              <a href="#" className="hover:text-black">
-                Upwork
-              </a>
-              <a href="#contact" className="hover:text-black">
-                Contact
-              </a>
-            </div>
-          </div>
-
-          <div className="mt-10 border-t border-black/10 pt-6 text-xs text-black/40">
-            © 2026 Affan Atif. All rights reserved.
-          </div>
-        </div>
-      </footer>
     </main>
   );
 }
