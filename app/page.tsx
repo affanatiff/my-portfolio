@@ -367,14 +367,14 @@ export default function Home() {
             <div className="mb-7 flex items-center gap-3">
               <span className="h-2 w-2 rounded-full bg-accent" />
               <span className="text-sm font-medium uppercase tracking-[0.18em] opacity-50">
-                AI Automation & n8n Specialist
+                I build systems that work for you.
               </span>
             </div>
 
             <h1 className="max-w-5xl font-[family-name:var(--font-display)] text-5xl font-bold leading-[0.95] tracking-[-0.05em] sm:text-6xl lg:text-8xl">
-              I build systems
+              AI Automation
               <br />
-              that <span className="text-accent">work for you.</span>
+              & <span className="text-accent">n8n Specialist</span>
             </h1>
 
             <p className="mt-8 max-w-2xl text-lg leading-8 opacity-60 sm:text-xl">
