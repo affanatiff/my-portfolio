@@ -1,0 +1,98 @@
+{
+  "meta": {
+    "note": "Sample n8n workflow export for portfolio demonstration purposes. Structure mirrors a real export; credentials and endpoints are placeholders.",
+    "project": "Lead Qualification Pipeline",
+    "publisher": "CodeBlue"
+  },
+  "name": "Lead Qualification Pipeline",
+  "active": false,
+  "nodes": [
+    {
+      "id": "4d5e6f7a-0001",
+      "name": "Form Submission Trigger",
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.2,
+      "position": [ -600, 0 ],
+      "parameters": { "formTitle": "Contact / Discovery Form" }
+    },
+    {
+      "id": "4d5e6f7a-0002",
+      "name": "Assign Criteria Weights",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [ -380, 0 ],
+      "parameters": {
+        "fields": {
+          "values": [
+            { "name": "budgetScore", "type": "number" },
+            { "name": "urgencyScore", "type": "number" },
+            { "name": "fitScore", "type": "number" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "4d5e6f7a-0003",
+      "name": "Code - Calculate Total Score",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [ -160, 0 ],
+      "parameters": {
+        "jsCode": "return items.map(item => { item.json.totalScore = item.json.budgetScore + item.json.urgencyScore + item.json.fitScore; return item; });"
+      }
+    },
+    {
+      "id": "4d5e6f7a-0004",
+      "name": "Switch - Route by Tier",
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3,
+      "position": [ 60, 0 ],
+      "parameters": {
+        "rules": {
+          "values": [
+            { "outputKey": "Hot", "conditions": { "number": [ { "value1": "={{$json[\"totalScore\"]}}", "operation": "largerEqual", "value2": 80 } ] } },
+            { "outputKey": "Warm", "conditions": { "number": [ { "value1": "={{$json[\"totalScore\"]}}", "operation": "largerEqual", "value2": 50 } ] } },
+            { "outputKey": "Cold", "conditions": { "number": [ { "value1": "={{$json[\"totalScore\"]}}", "operation": "lessThan", "value2": 50 } ] } }
+          ]
+        }
+      }
+    },
+    {
+      "id": "4d5e6f7a-0005",
+      "name": "Notify Sales - Hot Lead",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [ 280, -160 ],
+      "parameters": { "channel": "#hot-leads", "text": "🔥 Hot lead: {{$json[\"fullName\"]}} — score {{$json[\"totalScore\"]}}" }
+    },
+    {
+      "id": "4d5e6f7a-0006",
+      "name": "Add to Nurture Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [ 280, 0 ],
+      "parameters": { "operation": "append", "sheetName": "Warm Leads - Nurture" }
+    },
+    {
+      "id": "4d5e6f7a-0007",
+      "name": "Archive - Cold Lead",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [ 280, 160 ],
+      "parameters": { "operation": "append", "sheetName": "Cold Leads - Archive" }
+    }
+  ],
+  "connections": {
+    "Form Submission Trigger": { "main": [ [ { "node": "Assign Criteria Weights", "type": "main", "index": 0 } ] ] },
+    "Assign Criteria Weights": { "main": [ [ { "node": "Code - Calculate Total Score", "type": "main", "index": 0 } ] ] },
+    "Code - Calculate Total Score": { "main": [ [ { "node": "Switch - Route by Tier", "type": "main", "index": 0 } ] ] },
+    "Switch - Route by Tier": {
+      "main": [
+        [ { "node": "Notify Sales - Hot Lead", "type": "main", "index": 0 } ],
+        [ { "node": "Add to Nurture Sheet", "type": "main", "index": 0 } ],
+        [ { "node": "Archive - Cold Lead", "type": "main", "index": 0 } ]
+      ]
+    }
+  },
+  "settings": { "executionOrder": "v1" }
+}

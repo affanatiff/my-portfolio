@@ -1,0 +1,92 @@
+{
+  "meta": {
+    "note": "Sample n8n workflow export for portfolio demonstration purposes. Structure mirrors a real export; credentials and endpoints are placeholders.",
+    "project": "Shopify Customer Workflow",
+    "publisher": "CodeBlue"
+  },
+  "name": "E-Commerce Automation - Shopify Customer Workflow",
+  "active": false,
+  "nodes": [
+    {
+      "id": "3c4d5e6f-0001",
+      "name": "Shopify Trigger - Order Created",
+      "type": "n8n-nodes-base.shopifyTrigger",
+      "typeVersion": 1,
+      "position": [ -600, 0 ],
+      "parameters": { "topic": "orders/create" }
+    },
+    {
+      "id": "3c4d5e6f-0002",
+      "name": "Extract Customer & Order Data",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [ -380, 0 ],
+      "parameters": {
+        "fields": {
+          "values": [
+            { "name": "customerEmail", "type": "string" },
+            { "name": "orderTotal", "type": "number" },
+            { "name": "orderId", "type": "string" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "3c4d5e6f-0003",
+      "name": "Update Internal CRM",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [ -160, 0 ],
+      "parameters": { "method": "POST", "url": "https://api.example-crm.com/v1/customers/upsert" }
+    },
+    {
+      "id": "3c4d5e6f-0004",
+      "name": "Send Order Confirmation Email",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [ 60, -80 ],
+      "parameters": { "operation": "send", "subject": "Your order #{{$json[\"orderId\"]}} is confirmed" }
+    },
+    {
+      "id": "3c4d5e6f-0005",
+      "name": "Log to Workflow Sheet",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [ 60, 100 ],
+      "parameters": { "operation": "append", "sheetName": "Order Log" }
+    },
+    {
+      "id": "3c4d5e6f-0006",
+      "name": "IF High-Value Order",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [ 280, 0 ],
+      "parameters": {
+        "conditions": { "number": [ { "value1": "={{$json[\"orderTotal\"]}}", "operation": "largerEqual", "value2": 200 } ] }
+      }
+    },
+    {
+      "id": "3c4d5e6f-0007",
+      "name": "Notify VIP Team (Slack)",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [ 500, 0 ],
+      "parameters": { "channel": "#vip-orders", "text": "High-value order placed: #{{$json[\"orderId\"]}}" }
+    }
+  ],
+  "connections": {
+    "Shopify Trigger - Order Created": { "main": [ [ { "node": "Extract Customer & Order Data", "type": "main", "index": 0 } ] ] },
+    "Extract Customer & Order Data": { "main": [ [ { "node": "Update Internal CRM", "type": "main", "index": 0 } ] ] },
+    "Update Internal CRM": {
+      "main": [
+        [
+          { "node": "Send Order Confirmation Email", "type": "main", "index": 0 },
+          { "node": "Log to Workflow Sheet", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Send Order Confirmation Email": { "main": [ [ { "node": "IF High-Value Order", "type": "main", "index": 0 } ] ] },
+    "IF High-Value Order": { "main": [ [ { "node": "Notify VIP Team (Slack)", "type": "main", "index": 0 } ] ] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

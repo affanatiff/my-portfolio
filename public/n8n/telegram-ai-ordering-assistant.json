@@ -1,0 +1,85 @@
+{
+  "meta": {
+    "note": "Sample n8n workflow export for portfolio demonstration purposes. Structure mirrors a real export; credentials and endpoints are placeholders.",
+    "project": "Telegram AI Ordering Assistant",
+    "publisher": "CodeBlue"
+  },
+  "name": "AI Chatbot - Telegram Ordering Assistant",
+  "active": false,
+  "nodes": [
+    {
+      "id": "2b3c4d5e-0001",
+      "name": "Telegram Trigger",
+      "type": "n8n-nodes-base.telegramTrigger",
+      "typeVersion": 1.1,
+      "position": [ -600, 0 ],
+      "parameters": { "updates": [ "message" ] }
+    },
+    {
+      "id": "2b3c4d5e-0002",
+      "name": "Identify Customer (DB Lookup)",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [ -380, 0 ],
+      "parameters": { "operation": "select", "table": "customers" }
+    },
+    {
+      "id": "2b3c4d5e-0003",
+      "name": "AI Agent - Order Intake",
+      "type": "@n8n/n8n-nodes-langchain.agent",
+      "typeVersion": 1.7,
+      "position": [ -160, 0 ],
+      "parameters": {
+        "systemMessage": "You collect order details (items, quantity, delivery address) conversationally and confirm before checkout.",
+        "model": "gpt-4o-mini"
+      }
+    },
+    {
+      "id": "2b3c4d5e-0004",
+      "name": "Upsert Pending Order",
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.5,
+      "position": [ 60, 0 ],
+      "parameters": { "operation": "upsert", "table": "pending_orders" }
+    },
+    {
+      "id": "2b3c4d5e-0005",
+      "name": "IF Order Complete",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [ 280, 0 ],
+      "parameters": {
+        "conditions": { "boolean": [ { "value1": "={{$json[\"isComplete\"]}}", "value2": true } ] }
+      }
+    },
+    {
+      "id": "2b3c4d5e-0006",
+      "name": "Send Order Confirmation",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [ 500, -80 ],
+      "parameters": { "operation": "sendMessage", "text": "Your order is confirmed! 🎉" }
+    },
+    {
+      "id": "2b3c4d5e-0007",
+      "name": "Ask Follow-up Question",
+      "type": "n8n-nodes-base.telegram",
+      "typeVersion": 1.2,
+      "position": [ 500, 100 ],
+      "parameters": { "operation": "sendMessage", "text": "={{$json[\"nextQuestion\"]}}" }
+    }
+  ],
+  "connections": {
+    "Telegram Trigger": { "main": [ [ { "node": "Identify Customer (DB Lookup)", "type": "main", "index": 0 } ] ] },
+    "Identify Customer (DB Lookup)": { "main": [ [ { "node": "AI Agent - Order Intake", "type": "main", "index": 0 } ] ] },
+    "AI Agent - Order Intake": { "main": [ [ { "node": "Upsert Pending Order", "type": "main", "index": 0 } ] ] },
+    "Upsert Pending Order": { "main": [ [ { "node": "IF Order Complete", "type": "main", "index": 0 } ] ] },
+    "IF Order Complete": {
+      "main": [
+        [ { "node": "Send Order Confirmation", "type": "main", "index": 0 } ],
+        [ { "node": "Ask Follow-up Question", "type": "main", "index": 0 } ]
+      ]
+    }
+  },
+  "settings": { "executionOrder": "v1" }
+}

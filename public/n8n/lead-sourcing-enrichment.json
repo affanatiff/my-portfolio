@@ -1,0 +1,123 @@
+{
+  "meta": {
+    "note": "Sample n8n workflow export for portfolio demonstration purposes. Structure mirrors a real export; credentials and endpoints are placeholders.",
+    "project": "Lead Sourcing & Enrichment",
+    "publisher": "CodeBlue"
+  },
+  "name": "AI Lead Generation - Sourcing & Enrichment",
+  "active": false,
+  "nodes": [
+    {
+      "id": "1a2b3c4d-0001",
+      "name": "Webhook - New Lead",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [ -600, 0 ],
+      "parameters": {
+        "path": "leads/new",
+        "httpMethod": "POST",
+        "responseMode": "onReceived"
+      }
+    },
+    {
+      "id": "1a2b3c4d-0002",
+      "name": "Normalize Lead Fields",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3,
+      "position": [ -380, 0 ],
+      "parameters": {
+        "fields": {
+          "values": [
+            { "name": "fullName", "type": "string" },
+            { "name": "email", "type": "string" },
+            { "name": "company", "type": "string" },
+            { "name": "source", "type": "string" }
+          ]
+        }
+      }
+    },
+    {
+      "id": "1a2b3c4d-0003",
+      "name": "Enrich Company (Clearbit API)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [ -160, 0 ],
+      "parameters": {
+        "method": "GET",
+        "url": "https://company.example-enrichment-api.com/v2/companies/find",
+        "authentication": "genericCredentialType"
+      }
+    },
+    {
+      "id": "1a2b3c4d-0004",
+      "name": "AI Qualification Score",
+      "type": "@n8n/n8n-nodes-langchain.openAi",
+      "typeVersion": 1.5,
+      "position": [ 60, 0 ],
+      "parameters": {
+        "resource": "text",
+        "prompt": "Score this lead 0-100 based on company size, industry fit, and stated need.",
+        "model": "gpt-4o-mini"
+      }
+    },
+    {
+      "id": "1a2b3c4d-0005",
+      "name": "IF Score >= 60",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2,
+      "position": [ 280, 0 ],
+      "parameters": {
+        "conditions": {
+          "number": [ { "value1": "={{$json[\"score\"]}}", "operation": "largerEqual", "value2": 60 } ]
+        }
+      }
+    },
+    {
+      "id": "1a2b3c4d-0006",
+      "name": "Append to Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [ 500, -80 ],
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "sheetName": "Qualified Leads"
+      }
+    },
+    {
+      "id": "1a2b3c4d-0007",
+      "name": "Archive - Unqualified",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [ 500, 100 ],
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "sheetName": "Unqualified"
+      }
+    },
+    {
+      "id": "1a2b3c4d-0008",
+      "name": "Slack Alert - Sales",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.2,
+      "position": [ 720, -80 ],
+      "parameters": {
+        "channel": "#new-leads",
+        "text": "New qualified lead: {{$json[\"fullName\"]}} ({{$json[\"company\"]}})"
+      }
+    }
+  ],
+  "connections": {
+    "Webhook - New Lead": { "main": [ [ { "node": "Normalize Lead Fields", "type": "main", "index": 0 } ] ] },
+    "Normalize Lead Fields": { "main": [ [ { "node": "Enrich Company (Clearbit API)", "type": "main", "index": 0 } ] ] },
+    "Enrich Company (Clearbit API)": { "main": [ [ { "node": "AI Qualification Score", "type": "main", "index": 0 } ] ] },
+    "AI Qualification Score": { "main": [ [ { "node": "IF Score >= 60", "type": "main", "index": 0 } ] ] },
+    "IF Score >= 60": {
+      "main": [
+        [ { "node": "Append to Google Sheets", "type": "main", "index": 0 } ],
+        [ { "node": "Archive - Unqualified", "type": "main", "index": 0 } ]
+      ]
+    },
+    "Append to Google Sheets": { "main": [ [ { "node": "Slack Alert - Sales", "type": "main", "index": 0 } ] ] }
+  },
+  "settings": { "executionOrder": "v1" }
+}

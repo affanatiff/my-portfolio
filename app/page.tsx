@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Inter, Space_Grotesk } from "next/font/google";
 
 const display = Space_Grotesk({
@@ -12,6 +12,10 @@ const body = Inter({
   subsets: ["latin"],
   variable: "--font-body",
 });
+
+const CAL_LINK = "https://cal.com/code-blue";
+const GITHUB_LINK = "https://github.com/affanatiff";
+const EMAILS = ["affan@codeblue.sbs", "shaheer@codeblue.sbs"];
 
 const NAV_LINKS = [
   { label: "Projects", href: "#projects" },
@@ -26,7 +30,7 @@ const SERVICES = [
     eyebrow: "Workflows that run themselves",
     title: "AI Automation",
     description:
-      "I build practical AI-powered systems that remove repetitive work and connect the tools your business already uses.",
+      "We build practical AI-powered systems that remove repetitive work and connect the tools your business already uses.",
     features: [
       "AI-powered workflows",
       "Business process automation",
@@ -73,7 +77,7 @@ const PROCESS = [
     number: "02",
     title: "Design & Build",
     description:
-      "I map the workflow, configure the integrations, build the automation, and test each part before connecting everything together.",
+      "We map the workflow, configure the integrations, build the automation, and test each part before connecting everything together.",
   },
   {
     number: "03",
@@ -89,11 +93,27 @@ const PROCESS = [
   },
 ];
 
-const PROJECTS = [
+type Project = {
+  number: string;
+  category: string;
+  title: string;
+  trigger: string;
+  stat: string;
+  description: string;
+  stack: string[];
+  features: string[];
+  pipeline: string[];
+  payload: Record<string, unknown>;
+  jsonFile: string;
+};
+
+const PROJECTS: Project[] = [
   {
     number: "01",
     category: "AI Lead Generation",
     title: "Lead Sourcing & Enrichment",
+    trigger: "Webhook / New Lead",
+    stat: "⚡ Qualifies in seconds",
     description:
       "An automated pipeline designed to collect leads, enrich company information, qualify prospects, and organize the results for outreach.",
     stack: ["n8n", "APIs", "Google Sheets", "AI"],
@@ -103,11 +123,38 @@ const PROJECTS = [
       "Lead qualification",
       "Structured output",
     ],
+    pipeline: [
+      "Webhook — New Lead",
+      "Normalize Lead Fields",
+      "Enrich Company Data",
+      "AI Qualification Score",
+      "Route: Qualified / Unqualified",
+      "Slack Alert to Sales",
+    ],
+    payload: {
+      event: "lead.captured",
+      receivedAt: "2026-09-12T09:14:00Z",
+      lead: {
+        fullName: "Jordan Reyes",
+        email: "jordan@northfieldlogistics.com",
+        company: "Northfield Logistics",
+        source: "Webform",
+      },
+      enrichment: {
+        industry: "Freight & Logistics",
+        employees: 85,
+        website: "northfieldlogistics.com",
+      },
+      qualification: { score: 82, status: "Qualified" },
+    },
+    jsonFile: "/n8n/lead-sourcing-enrichment.json",
   },
   {
     number: "02",
     category: "AI Chatbot",
     title: "Telegram AI Ordering Assistant",
+    trigger: "Telegram / New Message",
+    stat: "💬 Books orders in chat",
     description:
       "A conversational ordering workflow designed to manage customer messages, collect order information, and maintain pending order states.",
     stack: ["n8n", "Telegram", "AI", "Database"],
@@ -117,11 +164,37 @@ const PROJECTS = [
       "Pending order management",
       "Automated responses",
     ],
+    pipeline: [
+      "Telegram Trigger",
+      "Identify Customer",
+      "AI Agent — Order Intake",
+      "Upsert Pending Order",
+      "Confirm or Ask Follow-up",
+    ],
+    payload: {
+      event: "telegram.message",
+      chatId: 5839201,
+      customer: {
+        name: "Maria Santos",
+        phone: "+63 917 555 0132",
+        returning: true,
+      },
+      order: {
+        items: [
+          { name: "Iced Latte", qty: 2 },
+          { name: "Blueberry Muffin", qty: 1 },
+        ],
+        status: "pending_confirmation",
+      },
+    },
+    jsonFile: "/n8n/telegram-ai-ordering-assistant.json",
   },
   {
     number: "03",
     category: "E-Commerce Automation",
     title: "Shopify Customer Workflow",
+    trigger: "Shopify / Order Created",
+    stat: "🛒 Zero-touch fulfillment ops",
     description:
       "An automation concept connecting store activity with customer communication and internal business processes.",
     stack: ["Shopify", "n8n", "Webhooks", "Email"],
@@ -131,11 +204,29 @@ const PROJECTS = [
       "Automated notifications",
       "Workflow logging",
     ],
+    pipeline: [
+      "Shopify Trigger — Order Created",
+      "Extract Customer & Order Data",
+      "Update Internal CRM",
+      "Send Confirmation Email",
+      "Notify VIP Team if High-Value",
+    ],
+    payload: {
+      event: "orders/create",
+      orderId: "#SHP-10432",
+      customerEmail: "hello@brightleafstudio.com",
+      orderTotal: 264.5,
+      currency: "USD",
+      lineItems: [{ title: "Studio Lighting Kit", quantity: 1 }],
+    },
+    jsonFile: "/n8n/shopify-customer-workflow.json",
   },
   {
     number: "04",
     category: "Lead Qualification",
     title: "Lead Qualification Pipeline",
+    trigger: "Form / New Submission",
+    stat: "📊 Scores & routes instantly",
     description:
       "A structured workflow that receives lead information, evaluates qualification criteria, assigns relevant data, and routes the result.",
     stack: ["n8n", "Forms", "Google Sheets", "AI"],
@@ -145,6 +236,23 @@ const PROJECTS = [
       "Lead scoring",
       "Automated routing",
     ],
+    pipeline: [
+      "Form Submission Trigger",
+      "Assign Criteria Weights",
+      "Calculate Total Score",
+      "Route by Tier (Hot / Warm / Cold)",
+      "Notify Sales or Archive",
+    ],
+    payload: {
+      event: "form.submitted",
+      fullName: "Devon Clarke",
+      budgetScore: 30,
+      urgencyScore: 25,
+      fitScore: 28,
+      totalScore: 83,
+      tier: "Hot",
+    },
+    jsonFile: "/n8n/lead-qualification-pipeline.json",
   },
 ];
 
@@ -152,8 +260,7 @@ const AUTOMATIONS = [
   {
     number: "01",
     title: "Lead Generation",
-    description:
-      "Capture → enrich → qualify → score → store → notify",
+    description: "Capture → enrich → qualify → score → store → notify",
     tools: ["Forms", "n8n", "APIs", "Google Sheets"],
   },
   {
@@ -166,8 +273,7 @@ const AUTOMATIONS = [
   {
     number: "03",
     title: "E-Commerce",
-    description:
-      "Order → process → update → notify → record",
+    description: "Order → process → update → notify → record",
     tools: ["Shopify", "Webhooks", "n8n", "Email"],
   },
 ];
@@ -176,7 +282,7 @@ const EXPERIENCE = [
   {
     period: "CURRENT",
     title: "AI Automation & n8n",
-    company: "Independent Projects",
+    company: "CodeBlue",
     description:
       "Building workflow automations, AI-powered processes, API integrations, chatbots, and business systems using n8n.",
   },
@@ -278,9 +384,107 @@ function ChevronDown({ open }: { open: boolean }) {
   );
 }
 
+function PlayIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M8 5v14l11-7z" />
+    </svg>
+  );
+}
+
+function BracesIcon() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <path d="M8 3a2 2 0 0 0-2 2v3a2 2 0 0 1-2 2 2 2 0 0 1 2 2v3a2 2 0 0 0 2 2" />
+      <path d="M16 3a2 2 0 0 1 2 2v3a2 2 0 0 0 2 2 2 2 0 0 0-2 2v3a2 2 0 0 1-2 2" />
+    </svg>
+  );
+}
+
+function GithubIcon() {
+  return (
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+      <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.57.1.78-.25.78-.55 0-.27-.01-1.16-.02-2.11-3.2.7-3.88-1.36-3.88-1.36-.52-1.34-1.28-1.69-1.28-1.69-1.04-.72.08-.7.08-.7 1.15.08 1.76 1.19 1.76 1.19 1.03 1.76 2.7 1.25 3.36.96.1-.75.4-1.25.73-1.53-2.55-.29-5.24-1.28-5.24-5.68 0-1.25.45-2.28 1.19-3.08-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.8 1.19 1.83 1.19 3.08 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.07.78 2.16 0 1.56-.01 2.82-.01 3.2 0 .31.2.66.79.55A10.52 10.52 0 0 0 23.5 12c0-6.35-5.15-11.5-11.5-11.5Z" />
+    </svg>
+  );
+}
+
+function DownloadIcon() {
+  return (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <path d="M12 3v12" />
+      <path d="m7 10 5 5 5-5" />
+      <path d="M5 21h14" />
+    </svg>
+  );
+}
+
+function XIcon() {
+  return (
+    <svg
+      width="18"
+      height="18"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+    >
+      <path d="M18 6 6 18" />
+      <path d="m6 6 12 12" />
+    </svg>
+  );
+}
+
 export default function Home() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [modal, setModal] = useState<{
+    type: "demo" | "payload";
+    index: number;
+  } | null>(null);
+
+  useEffect(() => {
+    function handleKey(event: KeyboardEvent) {
+      if (event.key === "Escape") setModal(null);
+    }
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, []);
+
+  function handleContactSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const name = String(data.get("name") || "").trim();
+    const email = String(data.get("email") || "").trim();
+    const details = String(data.get("details") || "").trim();
+
+    const subject = encodeURIComponent(
+      `New project inquiry${name ? ` from ${name}` : ""}`
+    );
+    const body = encodeURIComponent(
+      `Name: ${name || "-"}\nEmail: ${email || "-"}\n\n${details || "-"}`
+    );
+
+    window.location.href = `mailto:${EMAILS.join(
+      ","
+    )}?subject=${subject}&body=${body}`;
+  }
+
+  const activeProject = modal ? PROJECTS[modal.index] : null;
 
   return (
     <main
@@ -293,7 +497,7 @@ export default function Home() {
             href="#top"
             className="font-[family-name:var(--font-display)] text-xl font-bold tracking-tight"
           >
-            AA<span className="text-accent">.</span>
+            Code<span className="text-accent">Blue</span>
           </a>
 
           <nav className="hidden items-center gap-7 md:flex">
@@ -310,15 +514,17 @@ export default function Home() {
 
           <div className="hidden items-center gap-3 md:flex">
             <a
-              href="#contact"
+              href="#projects"
               className="rounded-full border border-border-color px-4 py-2 text-sm font-medium transition hover:border-text-primary hover:bg-text-primary hover:text-bg-primary"
             >
-              Check My CV
+              View Work
             </a>
 
             <a
-              href="#contact"
-              className="flex items-center gap-2 rounded-full bg-text-primary px-4 py-2 text-sm font-medium text-bg-primary transition hover:bg-accent hover:text-white"
+              href={CAL_LINK}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="cta-glow flex items-center gap-2 rounded-full bg-text-primary px-4 py-2 text-sm font-medium text-bg-primary transition hover:bg-accent hover:text-white"
             >
               Book a Free Call
               <ArrowUpRight />
@@ -349,7 +555,9 @@ export default function Home() {
               ))}
 
               <a
-                href="#contact"
+                href={CAL_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={() => setMenuOpen(false)}
                 className="rounded-full bg-text-primary px-5 py-3 text-center text-sm font-medium text-bg-primary"
               >
@@ -361,32 +569,45 @@ export default function Home() {
       </header>
 
       {/* HERO */}
-      <section id="top" className="border-b border-border-color">
-        <div className="mx-auto grid max-w-7xl gap-12 px-5 py-20 lg:grid-cols-[1.35fr_.65fr] lg:px-8 lg:py-32">
+      <section
+        id="top"
+        className="relative overflow-hidden border-b border-border-color"
+      >
+        <div
+          className="glow-blob left-[-10%] top-[-10%] h-[420px] w-[420px]"
+          aria-hidden
+        />
+        <div
+          className="glow-blob right-[-15%] top-[20%] h-[360px] w-[360px]"
+          aria-hidden
+        />
+
+        <div className="relative mx-auto grid max-w-7xl gap-12 px-5 py-20 lg:grid-cols-[1.35fr_.65fr] lg:px-8 lg:py-32">
           <div>
             <div className="mb-7 flex items-center gap-3">
               <span className="h-2 w-2 rounded-full bg-accent" />
               <span className="text-sm font-medium uppercase tracking-[0.18em] opacity-50">
-                I build systems that work for you.
+                We build systems that work for you.
               </span>
             </div>
 
             <h1 className="max-w-5xl font-[family-name:var(--font-display)] text-5xl font-bold leading-[0.95] tracking-[-0.05em] sm:text-6xl lg:text-8xl">
               AI Automation
-              <br />
-              & <span className="text-accent">n8n Specialist</span>
+              <br />& <span className="text-accent">n8n Specialists</span>
             </h1>
 
             <p className="mt-8 max-w-2xl text-lg leading-8 opacity-60 sm:text-xl">
-              I build AI-powered workflows, n8n automations, chatbots, and
+              We build AI-powered workflows, n8n automations, chatbots, and
               business systems that eliminate repetitive work and connect the
               tools your business already uses.
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <a
-                href="#contact"
-                className="flex items-center justify-center gap-2 rounded-full bg-text-primary px-6 py-3.5 text-sm font-semibold text-bg-primary transition hover:bg-accent hover:text-white"
+                href={CAL_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="cta-glow flex items-center justify-center gap-2 rounded-full bg-text-primary px-6 py-3.5 text-sm font-semibold text-bg-primary transition hover:bg-accent hover:text-white"
               >
                 Book a Free Discovery Call
                 <ArrowUpRight />
@@ -401,14 +622,19 @@ export default function Home() {
             </div>
 
             <div className="mt-8 flex flex-wrap gap-5 text-sm opacity-50">
-              <a href="#" className="transition hover:opacity-100">
+              <a
+                href={GITHUB_LINK}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="transition hover:opacity-100"
+              >
                 GitHub ↗
               </a>
-              <a href="#" className="transition hover:opacity-100">
-                LinkedIn ↗
-              </a>
-              <a href="#" className="transition hover:opacity-100">
-                Upwork ↗
+              <a
+                href={`mailto:${EMAILS[0]}`}
+                className="transition hover:opacity-100"
+              >
+                Email ↗
               </a>
             </div>
           </div>
@@ -487,7 +713,7 @@ export default function Home() {
             </p>
 
             <h2 className="mt-4 font-[family-name:var(--font-display)] text-4xl font-bold tracking-[-0.04em] sm:text-6xl">
-              What I can build
+              What we can build
               <br />
               for you.
             </h2>
@@ -502,7 +728,7 @@ export default function Home() {
             {SERVICES.map((service) => (
               <div
                 key={service.number}
-                className="group rounded-3xl border border-border-color bg-card-bg p-7 transition duration-300 hover:-translate-y-1 hover:shadow-xl"
+                className="group rounded-3xl border border-border-color bg-card-bg p-7 transition duration-300 hover:-translate-y-1 hover:border-accent/40 hover:shadow-xl"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-semibold text-accent">
@@ -511,9 +737,7 @@ export default function Home() {
                   <ArrowUpRight />
                 </div>
 
-                <p className="mt-12 text-sm opacity-45">
-                  {service.eyebrow}
-                </p>
+                <p className="mt-12 text-sm opacity-45">{service.eyebrow}</p>
 
                 <h3 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-bold">
                   {service.title}
@@ -547,7 +771,7 @@ export default function Home() {
         <div className="mx-auto max-w-7xl px-5 py-24 lg:px-8 lg:py-32">
           <div className="max-w-3xl">
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-accent">
-              How I work
+              How we work
             </p>
 
             <h2 className="mt-4 font-[family-name:var(--font-display)] text-4xl font-bold tracking-[-0.04em] sm:text-6xl">
@@ -595,19 +819,20 @@ export default function Home() {
             </div>
 
             <p className="max-w-md opacity-55">
-              A selection of automation and AI workflow concepts. Replace
-              these descriptions with your final project case studies.
+              Sample automation and AI workflow builds. Demos, payloads, and
+              workflow exports below are illustrative — built to show how
+              CodeBlue structures a pipeline end to end.
             </p>
           </div>
 
           <div className="mt-16 grid gap-8 md:grid-cols-2">
-            {PROJECTS.map((project) => (
+            {PROJECTS.map((project, index) => (
               <article key={project.number} className="group">
                 <div className="aspect-[16/10] overflow-hidden rounded-3xl border border-border-color bg-card-bg p-5">
                   <div className="flex h-full flex-col rounded-2xl bg-bg-primary/50 p-5">
                     <div className="flex items-center justify-between">
                       <span className="text-xs opacity-40">
-                        {project.category}
+                        {project.trigger}
                       </span>
                       <span className="text-xs text-accent">
                         {project.number}
@@ -615,19 +840,18 @@ export default function Home() {
                     </div>
 
                     <div className="my-auto space-y-3">
-                      <div className="h-3 w-3/4 rounded bg-text-primary/15" />
-                      <div className="h-3 w-1/2 rounded bg-text-primary/10" />
+                      <div className="text-sm font-medium opacity-70">
+                        {project.stat}
+                      </div>
 
-                      <div className="grid grid-cols-3 gap-2 pt-4">
+                      <div className="grid grid-cols-3 gap-2 pt-2">
                         <div className="h-14 rounded-lg bg-accent/80" />
                         <div className="h-14 rounded-lg bg-text-primary/10" />
                         <div className="h-14 rounded-lg bg-text-primary/10" />
                       </div>
                     </div>
 
-                    <div className="text-xs opacity-30">
-                      n8n · AI · APIs
-                    </div>
+                    <div className="text-xs opacity-30">n8n · AI · APIs</div>
                   </div>
                 </div>
 
@@ -667,6 +891,45 @@ export default function Home() {
                         {feature}
                       </div>
                     ))}
+                  </div>
+
+                  <div className="mt-6 flex flex-wrap gap-2 border-t border-border-color pt-6">
+                    <button
+                      type="button"
+                      onClick={() => setModal({ type: "demo", index })}
+                      className="flex items-center gap-2 rounded-full border border-border-color px-4 py-2 text-xs font-semibold transition hover:border-accent hover:text-accent"
+                    >
+                      <PlayIcon />
+                      View Demo
+                    </button>
+
+                    <button
+                      type="button"
+                      onClick={() => setModal({ type: "payload", index })}
+                      className="flex items-center gap-2 rounded-full border border-border-color px-4 py-2 text-xs font-semibold transition hover:border-accent hover:text-accent"
+                    >
+                      <BracesIcon />
+                      Inspect Sample Payload
+                    </button>
+
+                    <a
+                      href={GITHUB_LINK}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 rounded-full border border-border-color px-4 py-2 text-xs font-semibold transition hover:border-accent hover:text-accent"
+                    >
+                      <GithubIcon />
+                      View on GitHub
+                    </a>
+
+                    <a
+                      href={project.jsonFile}
+                      download
+                      className="flex items-center gap-2 rounded-full bg-text-primary px-4 py-2 text-xs font-semibold text-bg-primary transition hover:bg-accent hover:text-white"
+                    >
+                      <DownloadIcon />
+                      Download JSON
+                    </a>
                   </div>
                 </div>
               </article>
@@ -762,14 +1025,10 @@ export default function Home() {
                   <h3 className="font-[family-name:var(--font-display)] text-xl font-bold">
                     {item.title}
                   </h3>
-                  <p className="mt-1 text-sm opacity-45">
-                    {item.company}
-                  </p>
+                  <p className="mt-1 text-sm opacity-45">{item.company}</p>
                 </div>
 
-                <p className="leading-7 opacity-55">
-                  {item.description}
-                </p>
+                <p className="leading-7 opacity-55">{item.description}</p>
               </div>
             ))}
           </div>
@@ -791,14 +1050,15 @@ export default function Home() {
             </h2>
 
             <p className="mt-6 text-lg leading-8 opacity-55">
-              Once you have real client testimonials, we can place them here
-              exactly like the reference portfolio. No fake testimonials.
+              Once we have real client testimonials, we&apos;ll place them
+              here exactly like the reference portfolio. No fake
+              testimonials.
             </p>
           </div>
 
           <div className="mt-12 rounded-3xl border border-dashed border-border-color bg-card-bg p-8 text-center lg:p-16">
             <div className="mx-auto max-w-xl">
-              <div className="text-4xl">“</div>
+              <div className="text-4xl">&ldquo;</div>
               <p className="mt-3 font-[family-name:var(--font-display)] text-xl font-semibold">
                 Your first client testimonial will appear here.
               </p>
@@ -830,7 +1090,10 @@ export default function Home() {
               const isOpen = openFaq === index;
 
               return (
-                <div key={faq.question} className="border-b border-border-color">
+                <div
+                  key={faq.question}
+                  className="border-b border-border-color"
+                >
                   <button
                     onClick={() => setOpenFaq(isOpen ? null : index)}
                     className="flex w-full items-center justify-between gap-6 py-6 text-left"
@@ -868,33 +1131,38 @@ export default function Home() {
               </h2>
 
               <p className="mt-7 max-w-md text-lg leading-8 opacity-55">
-                Tell me about the workflow, business problem, or automation
+                Tell us about the workflow, business problem, or automation
                 you have in mind. We can figure out the best approach
                 together.
               </p>
 
-              <div className="mt-10 space-y-4 text-sm">
-                <a
-                  href="mailto:YOUR_EMAIL@example.com"
-                  className="block transition hover:text-accent"
-                >
-                  YOUR_EMAIL@example.com
-                </a>
+              <div className="mt-10 space-y-3 text-sm">
+                {EMAILS.map((email) => (
+                  <a
+                    key={email}
+                    href={`mailto:${email}`}
+                    className="block transition hover:text-accent"
+                  >
+                    {email}
+                  </a>
+                ))}
 
-                <p className="opacity-50">Remote · Worldwide</p>
+                <p className="pt-1 opacity-50">Remote · Worldwide</p>
 
                 <a
-                  href="#"
-                  className="inline-flex items-center gap-2 font-medium"
+                  href={CAL_LINK}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 pt-1 font-medium"
                 >
-                  Prefer Upwork? Hire me directly
+                  Prefer to talk it through? Book a free call
                   <ArrowUpRight />
                 </a>
               </div>
             </div>
 
             <form
-              onSubmit={(event) => event.preventDefault()}
+              onSubmit={handleContactSubmit}
               className="rounded-3xl border border-border-color bg-card-bg p-6 sm:p-8"
             >
               <div className="grid gap-6">
@@ -904,6 +1172,7 @@ export default function Home() {
                   </label>
                   <input
                     type="text"
+                    name="name"
                     placeholder="Your name"
                     className="w-full rounded-xl border border-border-color bg-bg-primary px-4 py-3.5 outline-none transition placeholder:opacity-30 focus:border-accent"
                   />
@@ -915,6 +1184,7 @@ export default function Home() {
                   </label>
                   <input
                     type="email"
+                    name="email"
                     placeholder="your.email@example.com"
                     className="w-full rounded-xl border border-border-color bg-bg-primary px-4 py-3.5 outline-none transition placeholder:opacity-30 focus:border-accent"
                   />
@@ -925,6 +1195,7 @@ export default function Home() {
                     Project Details
                   </label>
                   <textarea
+                    name="details"
                     rows={4}
                     placeholder="Describe the workflow, business process, or tools you want to automate..."
                     className="w-full rounded-xl border border-border-color bg-bg-primary px-4 py-3.5 outline-none transition placeholder:opacity-30 focus:border-accent"
@@ -933,7 +1204,7 @@ export default function Home() {
 
                 <button
                   type="submit"
-                  className="flex w-full items-center justify-center gap-2 rounded-full bg-text-primary py-4 text-sm font-semibold text-bg-primary transition hover:bg-accent hover:text-white"
+                  className="cta-glow flex w-full items-center justify-center gap-2 rounded-full bg-text-primary py-4 text-sm font-semibold text-bg-primary transition hover:bg-accent hover:text-white"
                 >
                   Send Message
                   <ArrowUpRight />
@@ -943,11 +1214,94 @@ export default function Home() {
           </div>
 
           <div className="mt-24 flex flex-col items-center justify-between gap-4 border-t border-border-color pt-8 text-xs opacity-50 sm:flex-row">
-            <p>© {new Date().getFullYear()} All rights reserved.</p>
+            <p>© {new Date().getFullYear()} CodeBlue. All rights reserved.</p>
             <p>Designed for AI Automation & n8n Systems</p>
           </div>
         </div>
       </section>
+
+      {/* PROJECT MODAL */}
+      {activeProject && modal && (
+        <div
+          className="modal-overlay fixed inset-0 z-[100] flex items-center justify-center bg-black/70 p-4"
+          onClick={() => setModal(null)}
+        >
+          <div
+            className="modal-panel max-h-[85vh] w-full max-w-lg overflow-y-auto rounded-3xl border border-border-color bg-card-bg p-6 sm:p-8"
+            onClick={(event) => event.stopPropagation()}
+          >
+            <div className="flex items-start justify-between gap-4">
+              <div>
+                <p className="text-xs uppercase tracking-[0.2em] text-accent">
+                  {modal.type === "demo" ? "Demo Preview" : "Sample Payload"}
+                </p>
+                <h3 className="mt-2 font-[family-name:var(--font-display)] text-2xl font-bold">
+                  {activeProject.title}
+                </h3>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setModal(null)}
+                aria-label="Close"
+                className="rounded-full border border-border-color p-2 transition hover:border-accent hover:text-accent"
+              >
+                <XIcon />
+              </button>
+            </div>
+
+            {modal.type === "demo" ? (
+              <div className="mt-6">
+                <p className="mb-6 text-sm opacity-55">
+                  {activeProject.trigger} · {activeProject.stat}
+                </p>
+
+                <div className="space-y-0">
+                  {activeProject.pipeline.map((step, stepIndex) => (
+                    <div key={step} className="flex gap-4">
+                      <div className="flex flex-col items-center">
+                        <span className="flow-dot flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-xs font-semibold text-white">
+                          {stepIndex + 1}
+                        </span>
+                        {stepIndex < activeProject.pipeline.length - 1 && (
+                          <span className="my-1 h-8 w-px flex-1 bg-border-color" />
+                        )}
+                      </div>
+                      <div className="pb-6 pt-1 text-sm font-medium">
+                        {step}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                <p className="mt-2 text-xs opacity-40">
+                  This is an illustrative pipeline diagram of how the
+                  automation runs, not a live product demo.
+                </p>
+              </div>
+            ) : (
+              <div className="mt-6">
+                <pre className="max-h-96 overflow-auto rounded-2xl bg-bg-primary p-4 text-xs leading-6 opacity-80">
+                  {JSON.stringify(activeProject.payload, null, 2)}
+                </pre>
+                <p className="mt-3 text-xs opacity-40">
+                  Sample data shown for illustration only — not real customer
+                  information.
+                </p>
+
+                <a
+                  href={activeProject.jsonFile}
+                  download
+                  className="mt-5 inline-flex items-center gap-2 rounded-full bg-text-primary px-4 py-2 text-xs font-semibold text-bg-primary transition hover:bg-accent hover:text-white"
+                >
+                  <DownloadIcon />
+                  Download full workflow JSON
+                </a>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }
