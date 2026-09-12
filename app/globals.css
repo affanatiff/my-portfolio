@@ -7,6 +7,16 @@
   --accent-soft: #60a5fa;
   --card-bg: #0d1220;
   --border-color: rgba(255, 255, 255, 0.09);
+
+  --glass-bg: linear-gradient(
+    160deg,
+    rgba(255, 255, 255, 0.07),
+    rgba(255, 255, 255, 0.015)
+  );
+  --glass-border: rgba(255, 255, 255, 0.14);
+  --glass-border-hover: rgba(255, 255, 255, 0.24);
+  --glass-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  --glass-shadow: 0 20px 50px -12px rgba(0, 0, 0, 0.55);
 }
 
 @theme inline {
@@ -32,6 +42,52 @@ body {
   filter: blur(90px);
   pointer-events: none;
   background: radial-gradient(circle, rgba(59, 130, 246, 0.35) 0%, rgba(59, 130, 246, 0) 70%);
+}
+
+/* Page-wide ambient backdrop — fixed behind all scrolling content so glass
+   surfaces always have something translucent to refract. Separate from the
+   local .glow-blob accents inside the hero, which stay clipped to it. */
+.ambient-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.ambient-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(110px);
+}
+
+/* Liquid-glass surface: translucent layered gradient, blurred backdrop,
+   a hairline border, and a soft inner highlight + outer shadow for depth. */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(20px) saturate(160%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
+}
+
+.glass-card {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px) saturate(150%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-highlight), var(--glass-shadow);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease;
+}
+
+.glass-card:hover {
+  border-color: var(--glass-border-hover);
+  box-shadow: var(--glass-highlight), 0 24px 60px -10px rgba(59, 130, 246, 0.25);
+}
+
+.glass-nav {
+  background: rgba(8, 11, 20, 0.6);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--glass-highlight), 0 10px 40px -8px rgba(0, 0, 0, 0.5);
 }
 
 .cta-glow {
@@ -73,4 +129,52 @@ body {
 ::selection {
   background: var(--accent);
   color: white;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  .animate-fade-up {
+    animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .fade-delay-1 {
+    animation-delay: 0.08s;
+  }
+  .fade-delay-2 {
+    animation-delay: 0.16s;
+  }
+  .fade-delay-3 {
+    animation-delay: 0.24s;
+  }
+  .fade-delay-4 {
+    animation-delay: 0.32s;
+  }
+
+  /* Scroll-triggered reveal: stays hidden until JS adds .in-view (see
+     useInView hook). Skipped entirely for reduced-motion, so content
+     is just visible by default instead of stuck invisible. */
+  .reveal {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  /* Longhand, not the `animation` shorthand: the shorthand would reset
+     animation-delay to 0 with higher specificity than .fade-delay-N,
+     silencing the stagger those classes are meant to add. */
+  .reveal.in-view {
+    animation-name: fadeInUp;
+    animation-duration: 0.7s;
+    animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    animation-fill-mode: both;
+  }
 }
