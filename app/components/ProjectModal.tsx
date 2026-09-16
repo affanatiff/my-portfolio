@@ -103,7 +103,7 @@ export default function ProjectModal({
 
         {type === "payload" && (
           <div className="mt-6">
-            <pre className="max-h-96 overflow-auto rounded-2xl bg-bg-primary p-4 text-xs leading-6 opacity-80">
+            <pre className="max-h-96 overflow-auto whitespace-pre-wrap break-words rounded-2xl bg-bg-primary p-4 text-xs leading-6 opacity-80">
               {JSON.stringify(project.payload, null, 2)}
             </pre>
             <p className="mt-3 text-xs opacity-40">
@@ -124,7 +124,7 @@ export default function ProjectModal({
 
         {type === "workflow" && (
           <div className="mt-6">
-            <pre className="max-h-96 overflow-auto rounded-2xl bg-bg-primary p-4 text-xs leading-6 opacity-80">
+            <pre className="max-h-96 overflow-auto whitespace-pre-wrap break-words rounded-2xl bg-bg-primary p-4 text-xs leading-6 opacity-80">
               {!showingCurrentWorkflow
                 ? "Loading…"
                 : workflowResult?.error
