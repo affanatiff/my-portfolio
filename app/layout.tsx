@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Geist, Geist_Mono, Inter, Space_Grotesk } from "next/font/google";
 import AmbientBackground from "./components/AmbientBackground";
 import "./globals.css";
 
@@ -11,6 +11,16 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const display = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-display",
+});
+
+const body = Inter({
+  subsets: ["latin"],
+  variable: "--font-body",
 });
 
 export const metadata: Metadata = {
@@ -26,7 +36,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased dark`}
       style={{ colorScheme: "dark" }}
     >
-      <body className="min-h-full flex flex-col">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} ${display.variable} ${body.variable} min-h-full flex flex-col`}
+      >
         <AmbientBackground />
         {children}
       </body>

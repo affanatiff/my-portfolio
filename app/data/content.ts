@@ -4,22 +4,22 @@ export const EMAILS = ["affan@codeblue.sbs", "shaheer@codeblue.sbs"];
 
 export const CAPABILITIES = [
   "n8n",
-  "AI Automation",
   "OpenAI",
   "APIs & Webhooks",
-  "Google Sheets",
-  "Telegram",
-  "CRM Sync",
-  "Lead Generation",
-  "AI Chatbots",
-  "Shopify",
+  "GoHighLevel",
+  "PostgreSQL",
+  "HubSpot",
+  "Airtable",
+  "Slack",
+  "RAG",
+  "WhatsApp Business Cloud",
 ];
 
 export const NAV_LINKS = [
-  { label: "Projects", href: "#projects" },
-  { label: "Automations", href: "#automations" },
-  { label: "Experience", href: "#experience" },
-  { label: "Contact", href: "#contact" },
+  { label: "Projects", href: "/#projects" },
+  { label: "Automations", href: "/#automations" },
+  { label: "Experience", href: "/#experience" },
+  { label: "Contact", href: "/#contact" },
 ];
 
 export const SERVICES = [
@@ -30,10 +30,10 @@ export const SERVICES = [
     description:
       "We build practical AI-powered systems that remove repetitive work and connect the tools your business already uses.",
     features: [
-      "AI-powered workflows",
-      "Business process automation",
-      "API integrations",
-      "Human-in-the-loop systems",
+      "AI-powered Workflows",
+      "Business Process Automation",
+      "API Integrations",
+      "Human-in-the-Loop Systems",
     ],
   },
   {
@@ -43,23 +43,23 @@ export const SERVICES = [
     description:
       "Custom n8n workflows for lead generation, customer support, data processing, notifications, and internal operations.",
     features: [
-      "Webhook & API workflows",
-      "CRM & Google Sheets sync",
-      "Lead qualification",
-      "Email & Telegram automation",
+      "Webhook & API Workflows",
+      "CRM & Google Sheets Sync",
+      "Lead Qualification",
+      "Email & Telegram Automation",
     ],
   },
   {
     number: "03",
-    eyebrow: "AI-powered experiences",
-    title: "AI Chatbots & Agents",
+    eyebrow: "AI-powered Experiences",
+    title: "AI Chatbots & Voice Agents",
     description:
       "Useful AI assistants connected to real business data, APIs, databases, and communication channels.",
     features: [
-      "Telegram chatbots",
-      "AI customer support",
-      "Order & booking flows",
-      "Knowledge-based assistants",
+      "Telegram Chatbots",
+      "AI Customer Support",
+      "Order & Booking Flows",
+      "Knowledge-based Assistants",
     ],
   },
 ];
@@ -92,25 +92,34 @@ export const PROCESS = [
 ];
 
 export type Project = {
+  /** URL segment for the case study page: /projects/<slug> */
+  slug: string;
   number: string;
   category: string;
   title: string;
   trigger: string;
   stat: string;
   description: string;
+  /** Optional: the business problem this project solves. Left unset until
+   *  supplied per-project — not fabricated. */
+  problem?: string;
   stack: string[];
   features: string[];
   pipeline: string[];
   payload: Record<string, unknown>;
   jsonFile: string;
+  /** This project's own GitHub repo. Replace with the real repo URL once
+   *  it exists — placeholders follow github.com/affanatiff/<slug>. */
+  github: string;
 };
 
 export const PROJECTS: Project[] = [
   {
+    slug: "b2b-lead-sourcing-enrichment",
     number: "01",
     category: "AI Lead Generation",
-    title: "Lead Sourcing & Enrichment",
-    trigger: "Webhook / New Lead",
+    title: "B2B Lead Sourcing & Enrichment",
+    trigger: "Google Sheets / Add Or Update Row",
     stat: "⚡ Qualifies in seconds",
     description:
       "An automated pipeline designed to collect leads, enrich company information, qualify prospects, and organize the results for outreach.",
@@ -122,72 +131,104 @@ export const PROJECTS: Project[] = [
       "Structured output",
     ],
     pipeline: [
-      "Webhook — New Lead",
-      "Normalize Lead Fields",
-      "Enrich Company Data",
-      "AI Qualification Score",
-      "Route: Qualified / Unqualified",
-      "Slack Alert to Sales",
+      "Google Sheets Trigger",
+      "Validate Lead Data",
+      "Clean Lead Data",
+      "Enrich Company Info",
+      "Calculate Lead Score",
+      "Route: Hot / Warm / Nurture / Disqualified",
+      "Prepare CRM Record",
+      "Update Sheets",
     ],
     payload: {
-      event: "lead.captured",
-      receivedAt: "2026-09-12T09:14:00Z",
+    row_number: "4",
       lead: {
-        fullName: "Jordan Reyes",
-        email: "jordan@northfieldlogistics.com",
-        company: "Northfield Logistics",
-        source: "Webform",
+        "Company Name": "Atlassian",
+        "Website": "https://www.atlassian.com",
+        "Contact Name": "Mike Cannon-Brookes",
+        "Email": "IR@atlassian.com",
+        "Phone": "14157011110",
+        "Industry": "Software",
+        "Country": "Australia",
+        "Job Title": "Co-Founder & CEO",
       },
       enrichment: {
-        industry: "Freight & Logistics",
-        employees: 85,
-        website: "northfieldlogistics.com",
+        "Lead ID": "LEAD-1789557867774",
+        "Enriched Country": "United States",
+        "Enriched Legal Name": "Atlassian Corporation",
+        "Enriched Industry": "Software | Media & Internet Data Collection & Internet Portals | Business Services Custom Software & IT Services",
+        "Enriched Employees": "over 10,000",
+        "Enriched Revenue": "over-10 billion",
       },
-      qualification: { score: 82, status: "Qualified" },
+      qualification: { 
+        "ICP Fit": "Strong",
+        "Lead Quality": "Low",
+        "Recommended Action": "Research Further / Nurture",
+        "Score Breakdown": "company size 3 | industry fit 20 | decision maker 0 | data completeness 9 | commercial potential 10 | data quality 0",
+        "Final Score": 42,
+        "Status": "NURTURE,"
+       },
     },
     jsonFile: "/n8n/lead-sourcing-enrichment.json",
+    github: "https://github.com/affanatiff/b2b-lead-sourcing-enrichment",
   },
   {
+    slug: "customer-messages-ai-agent",
     number: "02",
-    category: "AI Chatbot",
-    title: "Telegram AI Ordering Assistant",
-    trigger: "Telegram / New Message",
+    category: "AI Agent",
+    title: "Customer Messages AI Agent",
+    trigger: "Webhook / Incoming Message",
     stat: "💬 Books orders in chat",
     description:
       "A conversational ordering workflow designed to manage customer messages, collect order information, and maintain pending order states.",
     stack: ["n8n", "Telegram", "AI", "Database"],
     features: [
-      "Conversational ordering",
-      "Customer identification",
-      "Pending order management",
-      "Automated responses",
+      "Conversational Ordering",
+      "Customer Identification",
+      "Pending Order Management",
+      "Automated Responses",
     ],
     pipeline: [
-      "Telegram Trigger",
-      "Identify Customer",
-      "AI Agent — Order Intake",
-      "Upsert Pending Order",
-      "Confirm or Ask Follow-up",
+      "Webhook Trigger",
+      "Edit Fields / Normalize Input",
+      "AI Agent Gemini",
+      "Parse AI Output",
+      "Log to Google Sheets",
+      "Confidenece Check",
+      "Send Auto Reply / Notify Team (Gmail)",
+      "Webhook Response",
+
     ],
     payload: {
-      event: "telegram.message",
-      chatId: 5839201,
+      event: "webhook.message",
       customer: {
-        name: "Maria Santos",
-        phone: "+63 917 555 0132",
-        returning: true,
+        name: "Anum",
+        email: "Account Issue",
+        message: "Hello, i have been trying to get in touch with customer support but have received no response. I have subscribed for your application services but my credentials have not been sent to me. Can someone please help me this",
+        webhookURL: "http://localhost:5678/webhook-test/customer-message",
+        executionMode: "test",
       },
-      order: {
-        items: [
-          { name: "Iced Latte", qty: 2 },
-          { name: "Blueberry Muffin", qty: 1 },
-        ],
-        status: "pending_confirmation",
+      "parsed output": {
+        "received at": "2026-09",
+        category: "Technical Support",
+        sentiment: "negative",
+        priority: "high",
+        confidence: 0.95,
+        suggested_reply: "Hello! We sincerely apologize for the delay in our response and for the frustration caused by the missing credentials. I have escalated your request to our technical team to ensure your access is provided immediately. Thank you for your patience while we resolve this for you.",
       },
-    },
+      "final output": {
+        "id": "1a0aa23a4a4a633d",
+        "threadId": "1a0aa23a4a4a633d",
+        "labelIds": [
+          "SENT"
+  ]
+}
+      },
     jsonFile: "/n8n/telegram-ai-ordering-assistant.json",
+    github: "https://github.com/affanatiff/customer-messages-ai-agent",
   },
   {
+    slug: "shopify-customer-workflow",
     number: "03",
     category: "E-Commerce Automation",
     title: "Shopify Customer Workflow",
@@ -218,8 +259,10 @@ export const PROJECTS: Project[] = [
       lineItems: [{ title: "Studio Lighting Kit", quantity: 1 }],
     },
     jsonFile: "/n8n/shopify-customer-workflow.json",
+    github: "https://github.com/affanatiff/shopify-customer-workflow",
   },
   {
+    slug: "lead-qualification-pipeline",
     number: "04",
     category: "Lead Qualification",
     title: "Lead Qualification Pipeline",
@@ -251,6 +294,7 @@ export const PROJECTS: Project[] = [
       tier: "Hot",
     },
     jsonFile: "/n8n/lead-qualification-pipeline.json",
+    github: "https://github.com/affanatiff/lead-qualification-pipeline",
   },
 ];
 

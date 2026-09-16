@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import { CAL_LINK, NAV_LINKS } from "@/app/data/content";
 import { ArrowUpRight } from "./icons";
 
@@ -10,32 +11,32 @@ export default function Header() {
   return (
     <header className="sticky top-3 z-50 px-4 sm:top-4 sm:px-6 lg:px-8">
       <div className="glass-nav mx-auto flex max-w-6xl items-center justify-between rounded-full px-5 py-3 lg:px-6">
-        <a
-          href="#top"
+        <Link
+          href="/#top"
           className="font-[family-name:var(--font-display)] text-xl font-bold tracking-tight"
         >
           Code<span className="text-accent">Blue</span>
-        </a>
+        </Link>
 
         <nav className="hidden items-center gap-7 md:flex">
           {NAV_LINKS.map((link) => (
-            <a
+            <Link
               key={link.label}
               href={link.href}
               className="text-sm font-medium opacity-65 transition hover:opacity-100"
             >
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
         <div className="hidden items-center gap-3 md:flex">
-          <a
-            href="#projects"
+          <Link
+            href="/#projects"
             className="rounded-full border border-border-color px-4 py-2 text-sm font-medium transition hover:border-text-primary hover:bg-white/5"
           >
             View Work
-          </a>
+          </Link>
 
           <a
             href={CAL_LINK}
@@ -61,14 +62,14 @@ export default function Header() {
         <div className="glass-nav mx-auto mt-2 max-w-6xl rounded-3xl px-5 py-5 md:hidden">
           <nav className="flex flex-col gap-5">
             {NAV_LINKS.map((link) => (
-              <a
+              <Link
                 key={link.label}
                 href={link.href}
                 onClick={() => setMenuOpen(false)}
                 className="text-base font-medium"
               >
                 {link.label}
-              </a>
+              </Link>
             ))}
 
             <a
