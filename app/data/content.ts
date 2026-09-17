@@ -181,7 +181,7 @@ export const PROJECTS: Project[] = [
     stat: "💬 Books orders in chat",
     description:
       "A conversational ordering workflow designed to manage customer messages, collect order information, and maintain pending order states.",
-    stack: ["n8n", "Telegram", "AI", "Database"],
+    stack: ["n8n", "Webhook", "Gemini", "Sheets", "Gmail"],
     features: [
       "Conversational Ordering",
       "Customer Identification",
@@ -194,10 +194,9 @@ export const PROJECTS: Project[] = [
       "AI Agent Gemini",
       "Parse AI Output",
       "Log to Google Sheets",
-      "Confidenece Check",
+      "Confidence Check",
       "Send Auto Reply / Notify Team (Gmail)",
       "Webhook Response",
-
     ],
     payload: {
       event: "webhook.message",
@@ -205,7 +204,6 @@ export const PROJECTS: Project[] = [
         name: "Anum",
         email: "Account Issue",
         message: "Hello, i have been trying to get in touch with customer support but have received no response. I have subscribed for your application services but my credentials have not been sent to me. Can someone please help me this",
-        webhookURL: "http://localhost:5678/webhook-test/customer-message",
         executionMode: "test",
       },
       "parsed output": {
@@ -224,42 +222,49 @@ export const PROJECTS: Project[] = [
   ]
 }
       },
-    jsonFile: "/n8n/telegram-ai-ordering-assistant.json",
+    jsonFile: "/n8n/customers-messages-ai-agent.json",
     github: "https://github.com/affanatiff/customer-messages-ai-agent",
   },
   {
-    slug: "shopify-customer-workflow",
+    slug: "ai-document-processing",
     number: "03",
-    category: "E-Commerce Automation",
-    title: "Shopify Customer Workflow",
-    trigger: "Shopify / Order Created",
-    stat: "🛒 Zero-touch fulfillment ops",
+    category: "AIAutomation",
+    title: "AI Document Processing",
+    trigger: "Document Upload / Webhook Trigger",
+    stat: "� Automates Document Analysis and Processing",
     description:
       "An automation concept connecting store activity with customer communication and internal business processes.",
-    stack: ["Shopify", "n8n", "Webhooks", "Email"],
+    stack: ["n8n", "Webhooks", "Code (Base64)", "OpenRouter", "Google Sheets", "Slack"],
     features: [
-      "Webhook-based triggers",
-      "Customer data processing",
-      "Automated notifications",
-      "Workflow logging",
+      "Webhook-based Triggers",
+      "Customer Data Processing",
+      "Automated Notifications",
+      "Workflow Logging",
     ],
     pipeline: [
-      "Shopify Trigger — Order Created",
-      "Extract Customer & Order Data",
-      "Update Internal CRM",
-      "Send Confirmation Email",
-      "Notify VIP Team if High-Value",
+      "Document Upload",
+      "Document Pre-Processing",
+      "AI Data Classification & Data Extraction",
+      "Parse AI Response",
+      "Validate & Triage",
+      "Route Document Type (Invoice / Contract / Other)",
+      "Format Extracted Data",
+      "Store Document Data",
+      "Respond & Confirm",
     ],
-    payload: {
-      event: "orders/create",
-      orderId: "#SHP-10432",
-      customerEmail: "hello@brightleafstudio.com",
-      orderTotal: 264.5,
-      currency: "USD",
-      lineItems: [{ title: "Studio Lighting Kit", quantity: 1 }],
-    },
-    jsonFile: "/n8n/shopify-customer-workflow.json",
-    github: "https://github.com/affanatiff/shopify-customer-workflow",
+    payload: [
+{
+"status":"processed",
+"documentType":"Invoice",
+"vendor":"APEX DISTRIBUTOR",
+"invoiceNumber":"321597",
+"totalAmount":"3494694",
+"extractedDataJson": 
+"{\"vendor\":\"APEX DISTRIBUTOR\",\"invoiceNumber\":\"321597\",\"date\":\"2026-05-06\",\"dueDate\":null,\"totalAmount\":3494694,\"currency\":\"PKR\",\"lineItems\":[{\"description\":\"VENOFER 100MG INJ\",\"quantity\":1000,\"unitPrice\":3825,\"total\":3494694}],\"keyTerms\":[\"Warranty Under Section 23(1)(i) of the Drugs Act 1976\",\"FORM 2A\",\"Sales Tax\",\"Advance Income Tax u/s 236H\"]}"
+}
+  ],
+    jsonFile: "/n8n/ai-document-processing.json",
+    github: "https://github.com/affanatiff/ai-document-processing",
   },
   {
     slug: "lead-qualification-pipeline",
@@ -267,7 +272,7 @@ export const PROJECTS: Project[] = [
     category: "Lead Qualification",
     title: "Lead Qualification Pipeline",
     trigger: "Form / New Submission",
-    stat: "📊 Scores & routes instantly",
+    stat: "📊 Scores & Routes Instantly",
     description:
       "A structured workflow that receives lead information, evaluates qualification criteria, assigns relevant data, and routes the result.",
     stack: ["n8n", "Forms", "Google Sheets", "AI"],
